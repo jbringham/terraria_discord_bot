@@ -83,7 +83,10 @@ class TerrariaClient(discord.Client): # Inheritance in Python
 			await channel.send("Starting server...")
 
 client = TerrariaClient()
-client.run('NzE0NTgwMTM3MzQxMDkxOTAx.XswwdQ.KoqVCm2UsJB4RUxiaKPWcdYvEWY')
+
+token = open("token.txt", "r")
+
+client.run(token.read())
 
 
 

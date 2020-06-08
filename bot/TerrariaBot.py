@@ -79,7 +79,8 @@ class TerrariaClient(discord.Client): # Inheritance in Python
 		if self.get_server_status():
 			await channel.send("The Server is already **Online**")
 		else:
-			os.system("/home/jake/terraria/1404/start.sh")
+			# Figure out way to do relative path instead
+			os.system("/home/jake/game_servers/terraria/1405/start.sh")
 			await channel.send("Starting server...")
 
 client = TerrariaClient()

@@ -7,6 +7,20 @@ import os
 
 class TerrariaClient(discord.Client): # Inheritance in Python
 
+	def __init__(self, ops):
+		super().__init__()
+		self.ops = ops
+	# This likely isn't perfect but it'll stop the normal user
+	# Nitro users may be able to circumvent by naming themself as you
+	def is_op(self, user):
+		for op in self.ops:
+			if str(user) == op:
+				print(op + " == " + str(user));
+				return True
+			else:
+				print(op + " != " + str(user));
+		return False
+
 	def get_server_status(self):
 		output = sp.run(["screen", "-ls"], stdout=sp.PIPE)
 		return re.search("terraria_server", str(output)) != None
@@ -48,6 +62,12 @@ class TerrariaClient(discord.Client): # Inheritance in Python
 			self.run_server_command(command[1])					
 		elif command[1] == "night":
 			self.run_server_command("midnight")					
+		elif command[1] == "exit":
+			if self.is_op(message.author):
+				self.run_server_command(command[1])
+			else:
+				await message.add_reaction("\U0001f6d1")
+				return	
 		else:
 			await message.add_reaction("\u274C")
 			return	
@@ -83,7 +103,13 @@ class TerrariaClient(discord.Client): # Inheritance in Python
 			os.system("/home/jake/game_servers/terraria/1405/start.sh")
 			await channel.send("Starting server...")
 
-client = TerrariaClient()
+
+ops = open("ops.txt", "r").read().splitlines()
+client = TerrariaClient(ops)
+
+
+for op in client.ops:
+	print(op)
 
 token = open("token.txt", "r")
 
